@@ -15,11 +15,7 @@ const AddProduct = () => {
     const [colors, setColors] = useState([]);
     const [numOfCapPanels, setNumOfCapPanels] = useState(1);
 
-    const handleColorChange = (color, index) => {
-        const newColors = [...colors];
-        newColors[index] = color.hex;
-        setColors(newColors);
-    };
+
 
     const handleAddProductButtonClick = () => {
         setIsDropdownOpen(!isDropdownOpen);

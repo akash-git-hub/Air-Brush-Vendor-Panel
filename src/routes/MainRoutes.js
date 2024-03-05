@@ -6,7 +6,7 @@ import MainLayout from 'layout/MainLayout';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
-const VendorList = Loadable(lazy(() => import('pages/vendor-list/VendorList')));
+const VendorList = Loadable(lazy(() => import('pages/add-event/addEventMain')));
 const  EventList = Loadable(lazy(() => import('pages/event-list/EventList')));
 const  OrderList = Loadable(lazy(() => import('pages/order-list/OrderList')));
 
@@ -23,15 +23,11 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: 'vendor-list',
-      element: <VendorList />
-    },
-    {
       path: 'event-list',
       element: <EventList />
     },
     {
-      path: 'vendor-list',
+      path: 'add-event',
       element: <VendorList />
     },
     {

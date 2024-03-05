@@ -28,7 +28,7 @@ const dashboard = {
       id: 'VendorList',
       title: 'Add Events',
       type: 'item',
-      url: '/vendor-list',
+      url: '/add-event',
       icon: icons.UsergroupAddOutlined, 
       breadcrumbs: true
     },
