@@ -79,7 +79,6 @@ const headCells = [
     id: 'carbs',
     align: 'left',
     disablePadding: false,
-
     label: 'Status'
   },
   {

@@ -1,5 +1,5 @@
 // assets
-import { DashboardOutlined, UsergroupAddOutlined, SolutionOutlined, FileProtectOutlined  } from '@ant-design/icons';
+import { DashboardOutlined, UsergroupAddOutlined, SolutionOutlined, FileProtectOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
@@ -20,7 +20,7 @@ const dashboard = {
       id: 'dashboard',
       title: 'Dashboard',
       type: 'item',
-      url: '/',
+      url: '/vendor/dashboard',
       icon: icons.DashboardOutlined,
       breadcrumbs: false
     },
@@ -28,15 +28,15 @@ const dashboard = {
       id: 'VendorList',
       title: 'Add Events',
       type: 'item',
-      url: '/add-event',
-      icon: icons.UsergroupAddOutlined, 
+      url: '/vendor/add-event',
+      icon: icons.UsergroupAddOutlined,
       breadcrumbs: true
     },
     {
       id: 'EventList',
       title: 'Event List',
       type: 'item',
-      url: '/event-list',
+      url: '/vendor/event-list',
       icon: icons.SolutionOutlined,
       breadcrumbs: true
     },
@@ -44,7 +44,7 @@ const dashboard = {
       id: 'OrderList',
       title: 'Order List',
       type: 'item',
-      url: '/order-list',
+      url: '/vendor/order-list',
       icon: icons.FileProtectOutlined,
       breadcrumbs: true
     }

@@ -4,7 +4,7 @@ import EventForm from './EventForm';
 import AddProduct from './AddProduct';
 import { Grid, Button } from '@mui/material';
 
-const VendorList = () => {
+const AddEvent = () => {
   const [numOfEvents, setNumOfEvents] = useState(1);
   const handleAddMoreEvent = () => {
     setNumOfEvents((prevNum) => prevNum + 1);
@@ -53,4 +53,4 @@ const VendorList = () => {
   );
 };
 
-export default VendorList;
+export default AddEvent;
