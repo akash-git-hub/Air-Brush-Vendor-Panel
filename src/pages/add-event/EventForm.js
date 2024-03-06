@@ -177,7 +177,7 @@ const EventForm = () => {
                                     </Grid>
                                     <Grid item xs={3}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="date-time">Date/Time</InputLabel>
+                                            <InputLabel htmlFor="date-time">Date</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 error={Boolean(touched.date && errors.date)}

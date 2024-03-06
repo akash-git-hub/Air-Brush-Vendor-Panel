@@ -194,7 +194,7 @@ const AddProduct = () => {
                                                                         placeholder="Size"
                                                                         fullWidth
                                                                     />
-                                                                    {index !== 0 && (
+                                                                  
                                                                         <Button
                                                                             fullWidth
                                                                             size="large"
@@ -204,7 +204,7 @@ const AddProduct = () => {
                                                                         >
                                                                             Remove
                                                                         </Button>
-                                                                    )}
+                                                       
                                                                 </Stack>
                                                             </Grid>
                                                         ))}
@@ -223,6 +223,7 @@ const AddProduct = () => {
                                                             </Button>
                                                         </Grid>
                                                     </Grid>
+
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -384,17 +385,15 @@ const AddProduct = () => {
                                                                 placeholder="Size"
                                                                 fullWidth
                                                             />
-                                                            {index !== 0 && (
-                                                                <Button
-                                                                    fullWidth
-                                                                    size="large"
-                                                                    variant="contained"
-                                                                    color="secondary"
-                                                                    onClick={() => handleRemovesButtonClickSock(index)}
-                                                                >
-                                                                    Remove
-                                                                </Button>
-                                                            )}
+                                                            <Button
+                                                                fullWidth
+                                                                size="large"
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                onClick={() => handleRemovesButtonClickSock(index)}
+                                                            >
+                                                                Remove
+                                                            </Button>
                                                         </Stack>
                                                     </Grid>
                                                 ))}
@@ -413,13 +412,14 @@ const AddProduct = () => {
                                                     </Button>
                                                 </Grid>
                                             </Grid>
+
                                         </Grid>
                                     </Grid>
                                 </Box>
                             )}
                         </form>
                     )}
-                </Formik>
+                </Formik >
             ))}
             <Grid container spacing={2}>
                 <Grid item xs={2}>
@@ -440,7 +440,7 @@ const AddProduct = () => {
                 </Grid>
             </Grid>
             <Grid container spacing={2} style={{
-                justifyContent:'end'
+                justifyContent: 'end'
             }}>
                 <Grid item xs={2}>
                     <Button type="submit" variant="contained" color="primary" fullWidth style={{
