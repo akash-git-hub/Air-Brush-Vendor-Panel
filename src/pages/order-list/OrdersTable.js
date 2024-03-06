@@ -5,27 +5,24 @@ import { Link as RouterLink } from 'react-router-dom';
 // material-ui
 import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
-// third-party
-import { NumericFormat } from 'react-number-format';
-
 // project import
 import Dot from 'components/@extended/Dot';
 
-function createData(trackingNo, name, fat, carbs, protein) {
-  return { trackingNo, name, fat, carbs, protein };
+function createData(protein, trackingNo, name, fat, carbs) {
+  return { protein, trackingNo, name, fat, carbs, };
 }
 
 const rows = [
-  createData(84564564, 'Camera Lens', 40, 2, 40570),
-  createData(98764564, 'Laptop', 300, 0, 180139),
-  createData(98756325, 'Mobile', 355, 1, 90989),
-  createData(98652366, 'Handset', 50, 1, 10239),
-  createData(13286564, 'Computer Accessories', 100, 1, 83348),
-  createData(86739658, 'TV', 99, 0, 410780),
-  createData(13256498, 'Keyboard', 125, 2, 70999),
-  createData(98753263, 'Mouse', 89, 2, 10570),
-  createData(98753275, 'Desktop', 185, 1, 98063),
-  createData(98753291, 'Chair', 100, 0, 14001)
+  createData('Akash Verma', 84564564, 'Camera Lens', 40, 2, 40570),
+  createData('Sanjay Verma', 98764564, 'Laptop', 300, 0, 180139),
+  createData('Ankit Verma', 98756325, 'Mobile', 355, 1, 90989),
+  createData('Pankaj Verma', 98652366, 'Handset', 50, 1, 10239),
+  createData('Akshat Verma', 13286564, 'Computer Accessories', 100, 1, 83348),
+  createData('Vishal Verma', 86739658, 'TV', 99, 0, 410780),
+  createData('Sharan Verma', 13256498, 'Keyboard', 125, 2, 70999),
+  createData('Kumar Verma', 98753263, 'Mouse', 89, 2, 10570),
+  createData('Akash Verma', 98753275, 'Desktop', 185, 1, 98063),
+  createData('Hitesh Verma', 98753291, 'Chair', 100, 0, 14001)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -58,6 +55,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: 'protein',
+    align: 'left',
+    disablePadding: false,
+    label: 'Vendor Name',
+  },
+  {
     id: 'trackingNo',
     align: 'left',
     disablePadding: false,
@@ -70,23 +73,11 @@ const headCells = [
     label: 'Product Name'
   },
   {
-    id: 'fat',
-    align: 'right',
-    disablePadding: false,
-    label: 'Total Order'
-  },
-  {
     id: 'carbs',
-    align: 'left',
+    align: 'right',
     disablePadding: false,
     label: 'Status'
   },
-  {
-    id: 'protein',
-    align: 'right',
-    disablePadding: false,
-    label: 'Total Amount'
-  }
 ];
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
@@ -140,7 +131,7 @@ const OrderStatus = ({ status }) => {
   }
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack direction="row" spacing={1} alignItems="center" justifyContent="end">
       <Dot color={color} />
       <Typography>{title}</Typography>
     </Stack>
@@ -199,18 +190,15 @@ export default function OrderTable() {
                   key={row.trackingNo}
                   selected={isItemSelected}
                 >
+                  <TableCell align="left">{row.protein}</TableCell>
                   <TableCell component="th" id={labelId} scope="row" align="left">
                     <Link color="secondary" component={RouterLink} to="">
                       {row.trackingNo}
                     </Link>
                   </TableCell>
                   <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="left">
-                    <OrderStatus status={row.carbs} />
-                  </TableCell>
                   <TableCell align="right">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
+                    <OrderStatus status={row.carbs} />
                   </TableCell>
                 </TableRow>
               );

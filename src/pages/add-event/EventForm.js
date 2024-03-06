@@ -9,19 +9,17 @@ import {
     Typography,
     Box
 } from "@mui/material";
-import { CloseOutlined } from "@mui/icons-material";
+import { Delete, CloseOutlined } from "@mui/icons-material";
 
 import * as Yup from "yup";
 import { Formik } from "formik";
 
-// import FileUpload from "./FileUpload"; 
+// import FileUpload from "./FileUpload";
 import SketchPickers from "themes/overrides/SketchPicker";
 import FileUpload from "themes/overrides/FileUpload";
 
-
 const EventForm = () => {
     const [numOfAddPanels, setNumOfAddPanels] = useState(1);
-    const [select, setSelect] = useState("");
     const [panels, setPanels] = useState([{ id: 1, colors: [{ id: 1 }] }]);
 
     const handleAddMoreAddPanel = () => {
@@ -60,6 +58,15 @@ const EventForm = () => {
         );
     };
 
+    const handleDeletePanel = (panelIndex) => {
+        if (numOfAddPanels > 1) {
+            setPanels((prevPanels) =>
+                prevPanels.filter((panel, index) => index !== panelIndex)
+            );
+            setNumOfAddPanels((prevNum) => prevNum - 1);
+        }
+    };
+
     return (
         <>
             <Formik
@@ -70,7 +77,7 @@ const EventForm = () => {
                     date: "Indore, (M.P)",
                     email: "info@eventdetails.com",
                     password: "1234567890",
-                    submit: null,
+                    submit: null
                 }}
                 validationSchema={Yup.object().shape({
                     name: Yup.string().max(255).required("Event name is required"),
@@ -82,7 +89,7 @@ const EventForm = () => {
                         .email("Must be a valid email")
                         .max(255)
                         .required("Email is required"),
-                    password: Yup.string().max(255).required("Password is required"),
+                    password: Yup.string().max(255).required("Password is required")
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -102,17 +109,24 @@ const EventForm = () => {
                     handleSubmit,
                     isSubmitting,
                     touched,
-                    values,
+                    values
                 }) => (
-                    <form noValidate onSubmit={handleSubmit} style={{ marginBottom: '20px', marginTop: '20px'  }}>
-                        <Grid container spacing={1} >
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit}
+                        style={{ marginBottom: "20px", marginTop: "20px" }}
+                    >
+                        <Grid container spacing={1}>
                             <Grid item xs={2}>
-                                <FileUpload id={"FileUpload-01"} placeholder="Upload Event Image" />
+                                <FileUpload
+                                    id={"FileUpload-01"}
+                                    placeholder="Upload Event Image"
+                                />
                             </Grid>
                         </Grid>
-                        <Grid container spacing={1} >
+                        <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Grid container spacing={1} >
+                                <Grid container spacing={1}>
                                     <Grid item xs={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="event-name">Event Name</InputLabel>
@@ -196,12 +210,16 @@ const EventForm = () => {
                         <Grid container spacing={1}>
                             {[...Array(numOfAddPanels)].map((_, panelIndex) => (
                                 <Grid item xs={12} key={panelIndex}>
-                                    <Box container className="AddPanel" sx={{ marginY: '15px' }}>
-                                        {panelIndex === numOfAddPanels - 1 && (
-                                            <Grid container spacing={2} style={{ justifyContent: 'space-between' }}>
+                                    <Box container className="AddPanel" sx={{ marginY: "15px" }}>
+                                        <Grid container spacing={2} sx={{
+                                            justifyContent:'space-between'
+                                        }}>
+                                            {panelIndex === 0 && (
                                                 <Grid item xs={2}>
                                                     <Typography variant="h6">Upload Design</Typography>
                                                 </Grid>
+                                            )}
+                                            {panelIndex === numOfAddPanels - 1 && (
                                                 <Grid item xs={2}>
                                                     <Button
                                                         fullWidth
@@ -209,12 +227,13 @@ const EventForm = () => {
                                                         variant="outlined"
                                                         color="secondary"
                                                         onClick={handleAddMoreAddPanel}
+                                                        sx={{ marginBottom: "15px" }}
                                                     >
                                                         Add more Design
                                                     </Button>
                                                 </Grid>
-                                            </Grid>
-                                        )}
+                                            )}
+                                        </Grid>
                                         <Grid container spacing={2}>
                                             <Grid item xs={2}>
                                                 <FileUpload id={panelIndex} placeholder="Product Image" />
@@ -230,8 +249,13 @@ const EventForm = () => {
                                                                         size="normal"
                                                                         variant="outlined"
                                                                         color="secondary"
-                                                                        onClick={() => handleRemovesButtonClick(panelIndex, colorIndex)}
-                                                                        sx={{ minWidth: '100%' }}
+                                                                        onClick={() =>
+                                                                            handleRemovesButtonClick(
+                                                                                panelIndex,
+                                                                                colorIndex
+                                                                            )
+                                                                        }
+                                                                        sx={{ minWidth: "100%" }}
                                                                     >
                                                                         <CloseOutlined />
                                                                     </Button>
@@ -246,13 +270,25 @@ const EventForm = () => {
                                                             variant="contained"
                                                             color="primary"
                                                             onClick={() => handleAddedButtonClick(panelIndex)}
-                                                            style={{ marginTop: '25px' }}
+                                                            style={{ marginTop: "25px" }}
                                                         >
                                                             Add Color
                                                         </Button>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
+                                            {panelIndex !== 0 && (
+                                                <Grid item xs={12}>
+                                                    <Button
+                                                        startIcon={<Delete />}
+                                                        variant="outlined"
+                                                        color="error"
+                                                        onClick={() => handleDeletePanel(panelIndex)}
+                                                    >
+                                                        Delete Panel
+                                                    </Button>
+                                                </Grid>
+                                            )}
                                         </Grid>
                                     </Box>
                                 </Grid>
