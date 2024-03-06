@@ -5,14 +5,14 @@ import { Formik } from "formik";
 import FileUpload from "themes/overrides/FileUpload";
 import { Box } from "@mui/system";
 import SketchPickers from "themes/overrides/SketchPicker";
-import {Delete, CloseOutlined } from "../../../node_modules/@mui/icons-material/index";
+import { Delete, CloseOutlined } from "../../../node_modules/@mui/icons-material/index";
 
 const AddProduct = () => {
     const [select, setSelect] = React.useState('');
     const [sizes, setSizes] = useState(['']);
+    const [socksizes, setSockSizes] = useState(['']);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [colors, setColors] = useState([]);
-    const [sockcolors, setSockColors] = useState([]);
     const [numOfCapPanels, setNumOfCapPanels] = useState(1);
     const [products, setProducts] = useState([]);
 
@@ -60,13 +60,13 @@ const AddProduct = () => {
         setColors(newColors);
     };
     const handleAddedButtonClickSock = () => {
-        setSockColors([...sockcolors, '']);
+        setSockSizes([...socksizes, '']);
     };
 
     const handleRemovesButtonClickSock = (index) => {
-        const newColors = [...sockcolors];
-        newColors.splice(index, 1);
-        setSockColors(newColors);
+        const nSizes = [...socksizes];
+        nSizes.splice(index, 1);
+        setSockSizes(nSizes);
     };
 
     const handleAddMoreCapPanel = () => {
@@ -153,30 +153,6 @@ const AddProduct = () => {
                                             <Grid container spacing={2} >
                                                 <Grid item xs={2}>
                                                     <Stack spacing={1}>
-                                                        <InputLabel htmlFor="event-names">Enter Name</InputLabel>
-                                                        <OutlinedInput
-                                                            id="event-names"
-                                                            type="text"
-                                                            value={values.names}
-                                                            name="stock"
-                                                            onBlur={handleBlur}
-                                                            onChange={handleChange}
-                                                            placeholder="Enter name"
-                                                            fullWidth
-                                                            error={Boolean(touched.names && errors.names)}
-                                                        />
-                                                        {touched.names && errors.names && (
-                                                            <FormHelperText
-                                                                error
-                                                                id="standard-weight-helper-text-event-name"
-                                                            >
-                                                                {errors.names}
-                                                            </FormHelperText>
-                                                        )}
-                                                    </Stack>
-                                                </Grid>
-                                                <Grid item xs={2}>
-                                                    <Stack spacing={1}>
                                                         <InputLabel htmlFor="event-stock">Quantity / Stock</InputLabel>
                                                         <OutlinedInput
                                                             id="event-stock"
@@ -199,33 +175,7 @@ const AddProduct = () => {
                                                         )}
                                                     </Stack>
                                                 </Grid>
-                                                <Grid item xs={8}>
-                                                    <Stack spacing={1}>
-                                                        <InputLabel htmlFor="event-notes">Notes</InputLabel>
-                                                        <OutlinedInput
-                                                            id="event-notes"
-                                                            type="number"
-                                                            value={values.notes}
-                                                            name="stock"
-                                                            onBlur={handleBlur}
-                                                            onChange={handleChange}
-                                                            placeholder="Notes"
-                                                            fullWidth
-                                                            error={Boolean(touched.notes && errors.notes)}
-                                                        />
-                                                        {touched.notes && errors.notes && (
-                                                            <FormHelperText
-                                                                error
-                                                                id="standard-weight-helper-text-event-name"
-                                                            >
-                                                                {errors.notes}
-                                                            </FormHelperText>
-                                                        )}
-                                                    </Stack>
-                                                </Grid>
-                                            </Grid>
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={12}>
+                                                <Grid item xs={10}>
                                                     <Grid container spacing={2}>
                                                         {sizes.map((value, index) => (
                                                             <Grid item xs={2} key={index}>
@@ -269,7 +219,7 @@ const AddProduct = () => {
                                                                     marginTop: '1.6rem'
                                                                 }}
                                                             >
-                                                                Add Size
+                                                                Size
                                                             </Button>
                                                         </Grid>
                                                     </Grid>
@@ -317,19 +267,17 @@ const AddProduct = () => {
                                                         <Grid item xs={1} key={colorIndex}>
                                                             <Stack spacing={1}>
                                                                 <SketchPickers />
-                                                                {colorIndex !== 0 && (
-                                                                    <Button
-                                                                        size="normal"
-                                                                        variant="outlined"
-                                                                        color="secondary"
-                                                                        onClick={() => handleRemovesButtonClick(colorIndex)}
-                                                                        sx={{
-                                                                            minWidth: '100%'
-                                                                        }}
-                                                                    >
-                                                                        <CloseOutlined />
-                                                                    </Button>
-                                                                )}
+                                                                <Button
+                                                                    size="normal"
+                                                                    variant="outlined"
+                                                                    color="secondary"
+                                                                    onClick={() => handleRemovesButtonClick(colorIndex)}
+                                                                    sx={{
+                                                                        minWidth: '100%'
+                                                                    }}
+                                                                >
+                                                                    <CloseOutlined />
+                                                                </Button>
                                                             </Stack>
                                                         </Grid>
                                                     ))}
@@ -419,38 +367,49 @@ const AddProduct = () => {
                                         </Grid>
                                         <Grid item xs={8}>
                                             <Grid container spacing={2}>
-                                                {sockcolors.map((value, index) => (
-                                                    <Grid item xs={1} key={index}>
+                                                {socksizes.map((value, index) => (
+                                                    <Grid item xs={2} key={index}>
                                                         <Stack spacing={1}>
-                                                            <SketchPickers />
+                                                            <InputLabel htmlFor={`event-sizes-${index}`}>Size</InputLabel>
+                                                            <OutlinedInput
+                                                                id={`event-sizes-${index}`}
+                                                                type="text"
+                                                                name={`sizes${index}`}
+                                                                value={value}
+                                                                onChange={(event) => {
+                                                                    const nSizes = [...socksizes];
+                                                                    nSizes[index] = event.target.value;
+                                                                    setSockSizes(nSizes);
+                                                                }}
+                                                                placeholder="Size"
+                                                                fullWidth
+                                                            />
                                                             {index !== 0 && (
                                                                 <Button
-                                                                    size="normal"
-                                                                    variant="outlined"
+                                                                    fullWidth
+                                                                    size="large"
+                                                                    variant="contained"
                                                                     color="secondary"
                                                                     onClick={() => handleRemovesButtonClickSock(index)}
-                                                                    sx={{
-                                                                        minWidth: '100%'
-                                                                    }}
                                                                 >
-                                                                    <CloseOutlined />
+                                                                    Remove
                                                                 </Button>
                                                             )}
                                                         </Stack>
                                                     </Grid>
                                                 ))}
-                                                <Grid item xs={3}>
+                                                <Grid item xs={2}>
                                                     <Button
                                                         fullWidth
                                                         size="large"
                                                         variant="contained"
                                                         color="primary"
-                                                        onClick={handleAddedButtonClickSock}
+                                                        onClick={() => handleAddedButtonClickSock(index)}
                                                         style={{
                                                             marginTop: '1.6rem'
                                                         }}
                                                     >
-                                                        Add Color
+                                                        Size
                                                     </Button>
                                                 </Grid>
                                             </Grid>
@@ -458,13 +417,6 @@ const AddProduct = () => {
                                     </Grid>
                                 </Box>
                             )}
-                            {/* <Grid container spacing={2} >
-                                <Grid item xs={2}>
-                                    <Button type="submit" variant="contained" color="primary" fullWidth style={{
-                                        marginTop: '15px'
-                                    }}>Submit</Button>
-                                </Grid>
-                            </Grid> */}
                         </form>
                     )}
                 </Formik>
@@ -485,6 +437,15 @@ const AddProduct = () => {
                     >
                         Add Product
                     </Button>
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} style={{
+                justifyContent:'end'
+            }}>
+                <Grid item xs={2}>
+                    <Button type="submit" variant="contained" color="primary" fullWidth style={{
+                        marginTop: '15px'
+                    }}>Submit</Button>
                 </Grid>
             </Grid>
         </>

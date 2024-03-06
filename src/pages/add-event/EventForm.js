@@ -127,7 +127,7 @@ const EventForm = () => {
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Grid container spacing={1}>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="event-name">Event Name</InputLabel>
                                             <OutlinedInput
@@ -151,7 +151,7 @@ const EventForm = () => {
                                             )}
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="address">Address</InputLabel>
                                             <OutlinedInput
@@ -175,7 +175,7 @@ const EventForm = () => {
                                             )}
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="date-time">Date/Time</InputLabel>
                                             <OutlinedInput
@@ -199,6 +199,30 @@ const EventForm = () => {
                                             )}
                                         </Stack>
                                     </Grid>
+                                    <Grid item xs={3}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="time">Time</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.time && errors.time)}
+                                                id="time"
+                                                type="time"
+                                                value={values.time}
+                                                name="time"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder="Time"
+                                            />
+                                            {touched.time && errors.time && (
+                                                <FormHelperText
+                                                    error
+                                                    id="standard-weight-helper-text-date-time"
+                                                >
+                                                    {errors.time}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
                                     {errors.submit && (
                                         <Grid item xs={12}>
                                             <FormHelperText error>{errors.submit}</FormHelperText>
@@ -212,10 +236,11 @@ const EventForm = () => {
                                 <Grid item xs={12} key={panelIndex}>
                                     <Box container className="AddPanel" sx={{ marginY: "15px" }}>
                                         <Grid container spacing={2} sx={{
-                                            justifyContent:'space-between'
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
                                         }}>
                                             {panelIndex === 0 && (
-                                                <Grid item xs={2}>
+                                                <Grid item xs={10}>
                                                     <Typography variant="h6">Upload Design</Typography>
                                                 </Grid>
                                             )}
@@ -236,7 +261,7 @@ const EventForm = () => {
                                         </Grid>
                                         <Grid container spacing={2}>
                                             <Grid item xs={2}>
-                                                <FileUpload id={panelIndex} placeholder="Product Image" />
+                                                <FileUpload id={panelIndex} placeholder="Upload Design" />
                                             </Grid>
                                             <Grid item xs={10}>
                                                 <Grid container spacing={2}>
@@ -244,22 +269,20 @@ const EventForm = () => {
                                                         <Grid item xs={1} key={color.id}>
                                                             <Stack spacing={1}>
                                                                 <SketchPickers />
-                                                                {colorIndex !== 0 && (
-                                                                    <Button
-                                                                        size="normal"
-                                                                        variant="outlined"
-                                                                        color="secondary"
-                                                                        onClick={() =>
-                                                                            handleRemovesButtonClick(
-                                                                                panelIndex,
-                                                                                colorIndex
-                                                                            )
-                                                                        }
-                                                                        sx={{ minWidth: "100%" }}
-                                                                    >
-                                                                        <CloseOutlined />
-                                                                    </Button>
-                                                                )}
+                                                                <Button
+                                                                    size="normal"
+                                                                    variant="outlined"
+                                                                    color="secondary"
+                                                                    onClick={() =>
+                                                                        handleRemovesButtonClick(
+                                                                            panelIndex,
+                                                                            colorIndex
+                                                                        )
+                                                                    }
+                                                                    sx={{ minWidth: "100%" }}
+                                                                >
+                                                                    <CloseOutlined />
+                                                                </Button>
                                                             </Stack>
                                                         </Grid>
                                                     ))}
@@ -276,6 +299,7 @@ const EventForm = () => {
                                                         </Button>
                                                     </Grid>
                                                 </Grid>
+
                                             </Grid>
                                             {panelIndex !== 0 && (
                                                 <Grid item xs={12}>
@@ -294,6 +318,8 @@ const EventForm = () => {
                                 </Grid>
                             ))}
                         </Grid>
+
+
                     </form>
                 )}
             </Formik>
