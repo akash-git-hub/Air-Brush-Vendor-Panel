@@ -24,7 +24,7 @@ root.render(
   <>
     <ReduxProvider store={store}>
       <AuthProvider>
-        <BrowserRouter basename="/">
+        <BrowserRouter>
           <App />
         </BrowserRouter>
       </AuthProvider>

@@ -62,7 +62,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     // logout
-    // setLoggedIn(false);
+    setLoggedIn(false);
     localStorage.clear();
     toast.success("Log out successfully")
     navigate("/", { replace: true });

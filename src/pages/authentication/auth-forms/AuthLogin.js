@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-// import { login } from "../../../networking/NetworkCall"
+import { login } from "../../../networking/NetworkCall"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { AuthContext } from "../../../states/AuthContext";
+import { AuthContext } from "../../../states/AuthContext";
 
 // material-ui
 import {
@@ -36,7 +36,7 @@ const AuthLogin = () => {
   // const [checked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const Navigate = useNavigate();
-  // const { setLoggedIn } = useContext(AuthContext);
+  const { setLoggedIn } = useContext(AuthContext);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -70,21 +70,19 @@ const AuthLogin = () => {
     onSubmit: async (values, { setErrors, setStatus, setSubmitting }) => {
 
 
-      // const res = await login(values);
-      // if (res.success) {
-      //   toast.success(res.message);
-      //   setLoggedIn(true);
-      //   localStorage.setItem("loggedIn", "true");
-      //   localStorage.setItem("authToken", `${res.data.token}`);
-      //   Navigate("/admin/dashboard", { replace: true });
-      // } else {
-      //   // setStatus({ success: false });
-      //   // setSubmitting(false);
-      //   // setErrors({ submit: res.message });
-      //   toast.error(res.message);
-      // }
-
-
+      const res = await login(values);
+      if (res.success) {
+        toast.success(res.msg);
+        setLoggedIn(true);
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("authToken", `${res.data.token}`);
+        Navigate("/vendor/dashboard", { replace: true });
+      } else {
+        // setStatus({ success: false });
+        // setSubmitting(false);
+        // setErrors({ submit: res.message });
+        toast.error(res.msg);
+      }
       // try {
       //   setStatus({ success:false });
       //   setSubmitting(false);

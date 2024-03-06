@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import ThemeCustomization from 'themes';
 import ScrollTop from 'components/ScrollTop';
 import MainLayout from "layout/MainLayout/index";
@@ -8,25 +8,28 @@ import EventList from "pages/event-list/EventList";
 import OrderList from "pages/order-list/OrderList";
 import AddEvent from "pages/add-event/AddEvent";
 import ErrorPage from "pages/ErrorPage";
+import { AuthContext } from "./states/AuthContext";
+import { useContext } from "react";
 
-const App = () => (
-  <ThemeCustomization>
+const App = () => {
+  const { loggedIn } = useContext(AuthContext);
+  return (<ThemeCustomization>
     <ScrollTop>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={loggedIn ? <Navigate to="/vendor" /> : <Login />} />
         <Route
           path="/vendor"
-          element={<MainLayout />}
+          element={loggedIn ? <MainLayout /> : <Navigate to="/" />}
         >
-          <Route path="/vendor/add-event" element={<AddEvent />} />
-          <Route path="/vendor/dashboard" element={<DashboardDefault />} />
-          <Route path="/vendor/order-list" element={<OrderList />} />
-          <Route path="/vendor/event-list" element={<EventList />} />
+          <Route path="/vendor/dashboard" element={loggedIn ? <DashboardDefault /> : <Navigate to="/" />} />
+          <Route path="/vendor/order-list" element={loggedIn ? <OrderList /> : <Navigate to="/" />} />
+          <Route path="/vendor/event-list" element={loggedIn ? <EventList /> : <Navigate to="/" />} />
+          <Route path="/vendor/add-event" element={loggedIn ? <AddEvent /> : <Navigate to="/" />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </ScrollTop>
-  </ThemeCustomization>
-);
+  </ThemeCustomization>)
+};
 
 export default App;
