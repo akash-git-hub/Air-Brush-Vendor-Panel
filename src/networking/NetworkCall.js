@@ -128,3 +128,8 @@ export const createArtist = async (data) => {
   const path = `/vendor/user/create-artist`;
   return await postRequest(path, data);
 }
+
+export const getArtists = async (page) => {
+  const path = `/vendor/user/artists?page=${page}`;
+  return await getRequest(path);
+}

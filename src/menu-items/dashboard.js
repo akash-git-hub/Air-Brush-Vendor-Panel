@@ -47,7 +47,15 @@ const dashboard = {
       url: '/vendor/order-list',
       icon: icons.FileProtectOutlined,
       breadcrumbs: true
-    }
+    },
+    {
+      id: 'artistList',
+      title: 'Artist List',
+      type: 'item',
+      url: '/vendor/artist-list',
+      icon: icons.UsergroupAddOutlined,
+      breadcrumbs: false
+    },
   ]
 };
 

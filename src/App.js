@@ -10,6 +10,7 @@ import AddEvent from "pages/add-event/AddEvent";
 import ErrorPage from "pages/ErrorPage";
 import { AuthContext } from "./states/AuthContext";
 import { useContext } from "react";
+import ArtisList from "pages/artist/artist-list/ArtistList";
 
 const App = () => {
   const { loggedIn } = useContext(AuthContext);
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/vendor/order-list" element={loggedIn ? <OrderList /> : <Navigate to="/" />} />
           <Route path="/vendor/event-list" element={loggedIn ? <EventList /> : <Navigate to="/" />} />
           <Route path="/vendor/add-event" element={loggedIn ? <AddEvent /> : <Navigate to="/" />} />
+          <Route path="/vendor/artist-list" element={loggedIn ? <ArtisList /> : <Navigate to="/" />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>
