@@ -95,6 +95,27 @@ const getRequest = async (path) => {
   return res;
 };
 
+const patchRequest = async (path, data) => {
+  let res = {
+    success: false,
+    msg: "Something went wrong, please try again later",
+  };
+
+  try {
+    const response = await axios({
+      method: "PATCH",
+      url: `${baseUrl}${path}`,
+      data,
+      headers: getHeader(),
+    });
+    res = response.data;
+  } catch (err) {
+    res.msg = err.response?.data.msg || err.msg;
+    return res;
+  }
+  return res;
+};
+
 export const login = async (data) => {
   const path = "/vendor/user/login";
   return await postRequest(path, data);
@@ -124,6 +145,11 @@ export const getEvents = async (page) => {
   return await getRequest(path);
 };
 
+export const updateEventStatus = async (eventId, data) => {
+  const path = `/admin/event/update-status/${eventId}`;
+  return await patchRequest(path, data)
+}
+
 export const createArtist = async (data) => {
   const path = `/vendor/user/create-artist`;
   return await postRequest(path, data);
@@ -131,5 +157,10 @@ export const createArtist = async (data) => {
 
 export const getArtists = async (page) => {
   const path = `/vendor/user/artists?page=${page}`;
+  return await getRequest(path);
+}
+
+export const getOders = async (page) => {
+  const path = `/vendor/order?page=${page}`;
   return await getRequest(path);
 }

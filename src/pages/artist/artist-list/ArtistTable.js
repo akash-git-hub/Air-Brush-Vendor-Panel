@@ -7,6 +7,9 @@ import { getArtists } from "../../../networking/NetworkCall"
 import { Grid, Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Pagination from 'themes/overrides/Pagination';
 import Loader from 'components/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AddArtist from '../add-artist/AddArtist';
 
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
@@ -86,6 +89,7 @@ export default function ArtistTable() {
     }, [currentPage]);
 
     return (<>
+        <ToastContainer />
         {loading ? <Loader /> : <Box>
             <TableContainer
                 sx={{

@@ -1,80 +1,66 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-
+import Pagination from 'themes/overrides/Pagination';
 // material-ui
 import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 // project import
 import Dot from 'components/@extended/Dot';
+import { getOders } from 'networking/NetworkCall';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loader from 'components/Loader';
 
-function createData(protein, trackingNo, name, fat, carbs) {
-  return { protein, trackingNo, name, fat, carbs, };
-}
-
-const rows = [
-  createData('Akash Verma', 84564564, 'Camera Lens', 40, 2, 40570),
-  createData('Sanjay Verma', 98764564, 'Laptop', 300, 0, 180139),
-  createData('Ankit Verma', 98756325, 'Mobile', 355, 1, 90989),
-  createData('Pankaj Verma', 98652366, 'Handset', 50, 1, 10239),
-  createData('Akshat Verma', 13286564, 'Computer Accessories', 100, 1, 83348),
-  createData('Vishal Verma', 86739658, 'TV', 99, 0, 410780),
-  createData('Sharan Verma', 13256498, 'Keyboard', 125, 2, 70999),
-  createData('Kumar Verma', 98753263, 'Mouse', 89, 2, 10570),
-  createData('Akash Verma', 98753275, 'Desktop', 185, 1, 98063),
-  createData('Hitesh Verma', 98753291, 'Chair', 100, 0, 14001)
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
 const headCells = [
   {
-    id: 'protein',
+    id: 'eventName',
     align: 'left',
     disablePadding: false,
-    label: 'Vendor Name',
+    label: 'Event Name',
   },
   {
-    id: 'trackingNo',
+    id: 'orderNumber',
     align: 'left',
     disablePadding: false,
-    label: 'Tracking No.'
+    label: 'Order No.'
   },
   {
-    id: 'name',
+    id: 'customerName',
+    align: 'left',
+    disablePadding: true,
+    label: 'Customer Name'
+  },
+  {
+    id: 'customerMobileNo',
+    align: 'left',
+    disablePadding: true,
+    label: 'Customer Mobile No.'
+  },
+  {
+    id: 'artistName',
+    align: 'left',
+    disablePadding: true,
+    label: 'Artist Name'
+  },
+  {
+    id: 'EventDate',
+    align: 'left',
+    disablePadding: true,
+    label: 'Event Date/Time'
+  },
+  {
+    id: 'product',
     align: 'left',
     disablePadding: true,
     label: 'Product Name'
   },
   {
-    id: 'carbs',
-    align: 'right',
+    id: 'status',
+    align: 'left',
     disablePadding: false,
     label: 'Status'
   },
@@ -82,7 +68,7 @@ const headCells = [
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function OrderTableHead({ order, orderBy }) {
+function OrderTableHead() {
   return (
     <TableHead>
       <TableRow>
@@ -91,7 +77,7 @@ function OrderTableHead({ order, orderBy }) {
             key={headCell.id}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
+          // sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.label}
           </TableCell>
@@ -113,17 +99,17 @@ const OrderStatus = ({ status }) => {
   let title;
 
   switch (status) {
-    case 0:
+    case "Pending":
       color = 'warning';
       title = 'Pending';
       break;
-    case 1:
+    case "Completed":
       color = 'success';
-      title = 'Approved';
+      title = 'Completed';
       break;
-    case 2:
-      color = 'error';
-      title = 'Rejected';
+    case "Picked":
+      color = 'success';
+      title = 'Picked';
       break;
     default:
       color = 'primary';
@@ -145,67 +131,100 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function OrderTable() {
-  const [order] = useState('asc');
-  const [orderBy] = useState('trackingNo');
-  const [selected] = useState([]);
+  const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState(1);
+  const [odersData, setOrdersData] = useState([]);
 
-  const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
+  useEffect(() => {
+    setLoading(true);
+    const getData = async () => {
+      const res = await getOders(currentPage);
+      if (res.success) {
+        setOrdersData(res.data?.data);
+        // toast.success(res.msg);
+        setTotalNumberOfPages(res.data?.totalNumberOfPages);
+      } else { toast.error(res.msg) }
+      setLoading(false);
+    }
+    getData();
+  }, [currentPage]);
 
   return (
-    <Box>
-      <TableContainer
-        sx={{
-          width: '100%',
-          overflowX: 'auto',
-          position: 'relative',
-          display: 'block',
-          maxWidth: '100%',
-          '& td, & th': { whiteSpace: 'nowrap' }
-        }}
-      >
-        <Table
-          aria-labelledby="tableTitle"
-          sx={{
-            '& .MuiTableCell-root:first-of-type': {
-              pl: 2
-            },
-            '& .MuiTableCell-root:last-of-type': {
-              pr: 3
-            }
-          }}
-        >
-          <OrderTableHead order={order} orderBy={orderBy} />
-          <TableBody>
-            {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-              const isItemSelected = isSelected(row.trackingNo);
-              const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+      <ToastContainer />
+      {loading ? <Loader /> : <>
+        <Box>
+          <TableContainer
+            sx={{
+              width: '100%',
+              overflowX: 'auto',
+              position: 'relative',
+              display: 'block',
+              maxWidth: '100%',
+              '& td, & th': { whiteSpace: 'nowrap' }
+            }}
+          >
+            <Table
+              aria-labelledby="tableTitle"
+              sx={{
+                '& .MuiTableCell-root:first-of-type': {
+                  pl: 2
+                },
+                '& .MuiTableCell-root:last-of-type': {
+                  pr: 3
+                }
+              }}
+            >
+              <OrderTableHead />
+              {odersData.length ? <TableBody>
+                {odersData.map((row, index) => {
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={row.trackingNo}
-                  selected={isItemSelected}
-                >
-                  <TableCell align="left">{row.protein}</TableCell>
-                  <TableCell component="th" id={labelId} scope="row" align="left">
-                    <Link color="secondary" component={RouterLink} to="">
-                      {row.trackingNo}
-                    </Link>
-                  </TableCell>
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="right">
-                    <OrderStatus status={row.carbs} />
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      tabIndex={-1}
+                      key={row.trackingNo}
+                    >
+                      <TableCell align="left">{row.event?.name}</TableCell>
+                      <TableCell align="left">{row.order_number}</TableCell>
+                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.mobile}</TableCell>
+                      <TableCell align="left">{row.ArtistOrder?.artist?.name}</TableCell>
+                      <TableCell align="right">{row.event?.date}/ {row.event?.time}</TableCell>
+                      <TableCell align="left">{row.event?.product_type}</TableCell>
+                      <TableCell align="left">
+                        <OrderStatus status={row.ArtistOrder?.status} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody> : <TableBody>
+                <TableRow tabIndex={-1}>
+                  <TableCell
+                    colSpan={headCells.length}
+                    sx={{
+                      textAlign: 'center',
+                      width: '100%',
+                      borderBottom: '0px solid #000'
+                    }}
+                  >
+                    <Typography variant="h2">
+                      Data Not Found
+                    </Typography>
                   </TableCell>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+              </TableBody>}
+
+            </Table>
+            {odersData.length > 0 && <Pagination count={totalNumberOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+          </TableContainer>
+        </Box>
+      </>}
+
+    </>
   );
 }

@@ -70,7 +70,8 @@ const AddArtist = () => {
             const res = await createArtist(values);
             if (res.success) {
                 toast.success(res.msg);
-                handleClose()
+                // handleClose()
+                navigate("/vendor/artist-list")
             } else {
                 toast.error(res.msg);
             }

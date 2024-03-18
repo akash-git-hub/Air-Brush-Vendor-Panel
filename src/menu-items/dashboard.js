@@ -54,7 +54,7 @@ const dashboard = {
       type: 'item',
       url: '/vendor/artist-list',
       icon: icons.UsergroupAddOutlined,
-      breadcrumbs: false
+      breadcrumbs: true
     },
   ]
 };
