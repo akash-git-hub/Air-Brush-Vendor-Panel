@@ -160,7 +160,12 @@ export const getArtists = async (page) => {
   return await getRequest(path);
 }
 
-export const getOders = async (page) => {
+export const getOrders = async (page) => {
   const path = `/vendor/order?page=${page}`;
+  return await getRequest(path);
+}
+
+export const getAnalytics = async () => {
+  const path = `/vendor/analytics`;
   return await getRequest(path);
 }

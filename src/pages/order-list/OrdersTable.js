@@ -7,7 +7,7 @@ import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHea
 
 // project import
 import Dot from 'components/@extended/Dot';
-import { getOders } from 'networking/NetworkCall';
+import { getOrders } from 'networking/NetworkCall';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from 'components/Loader';
@@ -139,7 +139,7 @@ export default function OrderTable() {
   useEffect(() => {
     setLoading(true);
     const getData = async () => {
-      const res = await getOders(currentPage);
+      const res = await getOrders(currentPage);
       if (res.success) {
         setOrdersData(res.data?.data);
         // toast.success(res.msg);
