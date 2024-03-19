@@ -31,6 +31,7 @@ import ProfileTab from './ProfileTab';
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { ProfileModal } from './ProfileModal';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -144,31 +145,12 @@ const Profile = () => {
                 >
                   <ClickAwayListener onClickAway={handleClose}>
                     <MainCard elevation={0} border={false} content={false}>
-                      <CardContent sx={{ px: 2.5, pt: 3 }}>
-                        <Grid container justifyContent="space-between" alignItems="center">
-                          <Grid item>
-                            <Stack direction="row" spacing={1.25} alignItems="center">
-                              <Stack>
-                                <Typography variant="h6">Vendor Panel</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                  Air Brush admin
-                                </Typography>
-                              </Stack>
-                            </Stack>
-                          </Grid>
-                          <Grid item>
-                            <IconButton size="large" color="secondary" onClick={handleLogout}>
-                              <LogoutOutlined />
-                            </IconButton>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
                       {open && (
                         <>
                           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
-                              <Tab
-                                sx={{
+                          
+                              <ProfileModal   sx={{
                                   display: 'flex',
                                   flexDirection: 'row',
                                   justifyContent: 'start',
@@ -177,8 +159,7 @@ const Profile = () => {
                                 }}
                                 icon={<UserOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
                                 label="Profile"
-                                {...a11yProps(0)}
-                              />
+                                {...a11yProps(0)}/>
                             </Tabs>
                           </Box>
                           <TabPanel value={value} index={0} dir={theme.direction}>
