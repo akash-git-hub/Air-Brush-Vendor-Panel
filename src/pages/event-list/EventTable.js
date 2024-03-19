@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import ActiveInactive from 'components/@extended/ActiveInactive';
 import Pagination from 'themes/overrides/Pagination';
 import { getEvents, updateEventStatus } from "../../networking/NetworkCall"
-import { Box, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack } from '@mui/material';
 import Loader from 'components/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { EyeOutlined} from '@ant-design/icons';
+
 // ==============================|| EVENT TABLE - HEADER CELL ||============================== //
 
 const headCells = [
@@ -167,7 +170,17 @@ export default function EventTable() {
                                         <TableCell align="left">{row.address}</TableCell>
                                         <TableCell align="left">{row.date}/ {row.time}</TableCell>
                                         <TableCell align="left">
-                                            <ActiveInactive id={row.id} isActive={row.status === "Active" ? true : false} handleButtonClick={handleButtonClick} />
+                                            <Stack direction="row" style={{
+                                                justifyContent:'space-between',
+                                                alignItems:'center'
+                                            }}>
+                                                <ActiveInactive id={row.id} isActive={row.status === "Active" ? true : false} handleButtonClick={handleButtonClick} />
+                                                <Link to="/vendor/event-detail">
+                                                <EyeOutlined style={{
+                                                    fontSize:'1.5vw'
+                                                }}/>
+                                                </Link>
+                                            </Stack>
                                         </TableCell>
                                     </TableRow>
                                 );
