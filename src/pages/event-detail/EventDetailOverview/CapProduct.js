@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 
-export const CapProduct = () => {
+export const CapProduct = ({ productImage, colorsArray, productQuantity }) => {
   return (
     <>
       <Box style={{
@@ -11,7 +11,7 @@ export const CapProduct = () => {
         <Grid container>
           <Grid item xs={2}>
             <img
-              src="https://rukminim2.flixcart.com/image/850/1000/xif0q/cap/c/y/m/free-latest-side-ny-baseball-cap-highever-original-imagnm8fvyf9jbpv.jpeg?q=90&crop=false"
+              src={productImage}
               alt=""
               className="img-fluid"
               style={{
@@ -34,7 +34,7 @@ export const CapProduct = () => {
                 <Typography variant="h5" component="h5" sx={{ mb: 0, }}>Quantity</Typography>
               </Grid>
               <Grid item xs={2}>
-                <Typography variant="h6" component="h6" sx={{ mb: 1, }}>30</Typography>
+                <Typography variant="h6" component="h6" sx={{ mb: 1, }}>{productQuantity}</Typography>
               </Grid>
             </Grid>
             <Grid container>
@@ -43,17 +43,20 @@ export const CapProduct = () => {
               </Grid>
               <Grid item xs={10}>
                 <Grid container>
-                  <Grid item >
-                    <Box
-                      sx={{
-                        border: "1px solid #000",
-                        height: "25px",
-                        width: "25px",
-                        mr:3,
-                        mb:1
-                      }}
-                    ></Box>
-                  </Grid>
+                  {colorsArray && colorsArray.length && colorsArray.map((c) =>
+                    <Grid item >
+                      <Box
+                        sx={{
+                          border: "1px solid #000",
+                          height: "25px",
+                          width: "25px",
+                          mr: 3,
+                          mb: 1,
+                          background: c
+                        }}
+                      ></Box>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

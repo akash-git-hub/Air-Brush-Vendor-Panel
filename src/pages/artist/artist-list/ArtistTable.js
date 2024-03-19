@@ -69,28 +69,11 @@ ArtistTableHead.propTypes = {
 
 // ==============================|| Vendor TABLE ||============================== //
 
-export default function ArtistTable() {
-    const [artists, setartists] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalNumberOfPages, setTotalNumberOfPages] = useState(1);
+export default function ArtistTable({ totalNumberOfPages, artists, currentPage, setCurrentPage }) {
 
-    useEffect(() => {
-        setLoading(true);
-        const getData = async () => {
-            const res = await getArtists(currentPage);
-            if (res.success) {
-                setartists(res.data?.data);
-                setTotalNumberOfPages(res.data?.totalNumberOfPages);
-            }
-            setLoading(false);
-        };
-        getData();
-    }, [currentPage]);
 
     return (<>
-        <ToastContainer />
-        {loading ? <Loader /> : <Box>
+        <Box>
             <TableContainer
                 sx={{
                     width: '100%',
@@ -168,7 +151,7 @@ export default function ArtistTable() {
                 </Table>
                 {artists.length > 0 && <Pagination count={totalNumberOfPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
             </TableContainer>
-        </Box>}
+        </Box>
     </>
     );
 }

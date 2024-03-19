@@ -11,7 +11,7 @@ import ErrorPage from "pages/ErrorPage";
 import { AuthContext } from "./states/AuthContext";
 import { useContext } from "react";
 import ArtisList from "pages/artist/artist-list/ArtistList";
-import { EventDetail } from "pages/add-event/EventDetail";
+import { EventDetail } from "pages/event-detail/EventDetail";
 
 const App = () => {
   const { loggedIn } = useContext(AuthContext);

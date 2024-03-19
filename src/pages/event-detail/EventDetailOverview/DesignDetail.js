@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 
-export const DesignDetail = () => {
+export const DesignDetail = ({ bgimage, colorsArray }) => {
     return (
         <>
             <Box style={{
@@ -11,7 +11,7 @@ export const DesignDetail = () => {
                 <Grid container >
                     <Grid item xs={2}>
                         <img
-                            src="https://img.freepik.com/premium-vector/bg-gb-creative-abstract-logo_649646-171.jpg"
+                            src={bgimage}
                             alt=""
                             className="img-fluid"
                             style={{
@@ -37,17 +37,20 @@ export const DesignDetail = () => {
                             </Grid>
                             <Grid item xs={10}>
                                 <Grid container>
-                                    <Grid item >
-                                        <Box
-                                            sx={{
-                                                border: "1px solid #000",
-                                                height: "25px",
-                                                width: "25px",
-                                                mr: 3,
-                                                mb: 1
-                                            }}
-                                        ></Box>
-                                    </Grid>
+                                    {colorsArray && colorsArray.length && colorsArray.map((c) =>
+                                        <Grid item >
+                                            <Box
+                                                sx={{
+                                                    border: "1px solid #000",
+                                                    height: "25px",
+                                                    width: "25px",
+                                                    mr: 3,
+                                                    mb: 1,
+                                                    background: c
+                                                }}
+                                            ></Box>
+                                        </Grid>
+                                    )}
                                 </Grid>
                             </Grid>
                         </Grid>

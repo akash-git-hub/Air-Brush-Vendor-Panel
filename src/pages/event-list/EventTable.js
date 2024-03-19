@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ActiveInactive from 'components/@extended/ActiveInactive';
 import Pagination from 'themes/overrides/Pagination';
 import { getEvents, updateEventStatus } from "../../networking/NetworkCall"
@@ -8,7 +8,7 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import Loader from 'components/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { EyeOutlined} from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 
 // ==============================|| EVENT TABLE - HEADER CELL ||============================== //
 
@@ -41,7 +41,7 @@ const headCells = [
         id: 'activeInactive',
         align: 'left',
         disablePadding: false,
-        label: 'Enable/Disable'
+        label: 'Action'
     },
 ];
 
@@ -171,14 +171,14 @@ export default function EventTable() {
                                         <TableCell align="left">{row.date}/ {row.time}</TableCell>
                                         <TableCell align="left">
                                             <Stack direction="row" style={{
-                                                justifyContent:'space-between',
-                                                alignItems:'center'
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
                                             }}>
                                                 <ActiveInactive id={row.id} isActive={row.status === "Active" ? true : false} handleButtonClick={handleButtonClick} />
-                                                <Link to="/vendor/event-detail">
-                                                <EyeOutlined style={{
-                                                    fontSize:'1.5vw'
-                                                }}/>
+                                                <Link to="/vendor/event-detail" state={{ eventId:row.id }}>
+                                                    <EyeOutlined style={{
+                                                        fontSize: '1.5vw'
+                                                    }} />
                                                 </Link>
                                             </Stack>
                                         </TableCell>

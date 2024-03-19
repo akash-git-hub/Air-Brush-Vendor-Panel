@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 import { createArtist } from "../../../networking/NetworkCall";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import {
     Button,
     Grid,
@@ -28,13 +28,13 @@ const style = {
     p: 4,
 };
 
-const AddArtist = () => {
+const AddArtist = ({ btnClass, getData }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
+    const path = useLocation().pathname;
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -69,9 +69,12 @@ const AddArtist = () => {
         onSubmit: async (values, { setErrors, setStatus, setSubmitting }) => {
             const res = await createArtist(values);
             if (res.success) {
-                toast.success(res.msg);
                 // handleClose()
-                navigate("/vendor/artist-list")
+                toast.success(res.msg);
+                if (path != '/vendor/artist-list') {
+                    navigate("/vendor/artist-list");
+
+                } else getData();
             } else {
                 toast.error(res.msg);
             }
@@ -81,7 +84,7 @@ const AddArtist = () => {
     return (
         <>
             <ToastContainer />
-            <Button className="w-100" type="button" variant="contained" size="large" onClick={handleOpen} startIcon={<PlusCircleOutlined />}>Add Artist</Button>
+            <Button className={btnClass} type="button" variant="contained" size="large" onClick={handleOpen} startIcon={<PlusCircleOutlined />}>Add Artist</Button>
             <Modal
                 open={open}
                 onClose={handleClose}

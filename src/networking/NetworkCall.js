@@ -169,3 +169,8 @@ export const getAnalytics = async () => {
   const path = `/vendor/analytics`;
   return await getRequest(path);
 }
+
+export const eventDetail = async (eventId) => {
+  const path = `/vendor/event/${eventId}`;
+  return await getRequest(path);
+}
