@@ -1,130 +1,157 @@
 import React, { useState } from "react";
 import {
-    Button,
-    Grid,
-    InputLabel,
-    FormControl,
-    Select,
-    MenuItem,
+  Button,
+  Grid,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+  Box,
 } from "@mui/material";
-import * as Yup from "yup";
-import { Formik } from "formik";
-import Tshirt from "./TypeProduct/Tshirt";
 import Cap from "./TypeProduct/Cap";
-import Socks from "./TypeProduct/Socks";
+import { productTypes } from "constants/constants";
+import TshirtSocks from "./TypeProduct/TshirtSocks";
 
-const AddProduct = () => {
-    const [products, setProducts] = useState([]);
+const AddProduct = ({ dataCallback }) => {
+  const [products, setProducts] = useState([]);
+  const [availableProductTypes, setAvailableProductTypes] =
+    useState(productTypes);
 
+  const onAddProductClickHandler = (e) => {
+    const data = [...products];
 
-    return (
-        <>
-                <Formik
-                    initialValues={{
-                        stock: "10",
-                        size: "M",
-                    }}
-                    validationSchema={Yup.object().shape({
-                        stock: Yup.string().max(255).required("Enter the quantity"),
-                        size: Yup.string().max(255).required("Enter the Size"),
-                    })}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log(values);
-                        setSubmitting(false);
-                    }}
-                >
-                    {({
-                        errors,
-                        handleBlur,
-                        handleChange,
-                        handleSubmit,
-                        isSubmitting,
-                        touched,
-                        values,
-                    }) => (
-                        <form
-                            onSubmit={handleSubmit}
-                            style={{
-                                marginTop: "1rem",
-                            }}
-                        >
-                            <Grid container spacing={2}>
-                                <Grid item xs={4}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="product-type-label">
-                                            Type Of Product
-                                        </InputLabel>
-                                        <Select
-                                            labelId="product-type-label"
-                                            value='type'
-                                            label="Type of product"
-                                        >
-                                            <MenuItem value={"T-shirt"}>T-shirt</MenuItem>
-                                            <MenuItem value={"Cap"}>Cap</MenuItem>
-                                            <MenuItem value={"Socks"}>Socks</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Button
-                                        disableElevation
-                                        fullWidth
-                                        size="large"
-                                        type="submit"
-                                        variant="outlined"
-                                        color="primary"
-                                        disabled={isSubmitting}
-                                    >
-                                        Remove Product
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                            <Tshirt />
-                            <Cap />
-                            <Socks />
-                            <Grid container spacing={2}>
-                                <Grid item xs={2}>
-                                    <Button
-                                        disableElevation
-                                        fullWidth
-                                        size="large"
-                                        type="button"
-                                        variant="outlined"
-                                        color="primary"
-                                        style={{
-                                            marginTop: "15px",
-                                        }}
-                                    >
-                                        Add Product
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                            <Grid
-                                container
-                                spacing={2}
-                                style={{
-                                    justifyContent: "end",
-                                }}
-                            >
-                                <Grid item xs={2}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                        style={{
-                                            marginTop: "15px",
-                                        }}
-                                    >
-                                        Submit
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    )}
-                </Formik>
-        </>
-    );
+    const d = { product_type: "" };
+    data.push(d);
+    setProducts(data);
+
+    dataCallback("products", d, "add");
+  };
+
+  const onRemoveProductClickHandler = (e, index) => {
+    const data = [...products];
+
+    data.splice(index, 1);
+    setProducts(data);
+
+    dataCallback("products", null, "remove", index);
+  };
+
+  const onProductTypeChangeHandler = (e, index) => {
+    const data = [...products];
+
+    if (e.target.value !== "cap") {
+      const existingSelectedType = data.find(
+        (val, i) => val.product_type === e.target.value
+      );
+
+      if(existingSelectedType){
+        return;
+      }
+    }
+
+    data[index].product_type = e.target.value;
+
+    setProducts(data);
+
+    dataCallback("products", data[index], "update", index);
+  };
+
+  const buildProductTypeComponent = (val, index) => (
+    <Box key={index}>
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <FormControl fullWidth>
+            <InputLabel id="product-type-label">Type Of Product</InputLabel>
+            <Select
+              labelId="product-type-label"
+              value={val.product_type}
+              label="Type of product"
+              onChange={(e) => onProductTypeChangeHandler(e, index)}
+            >
+              {availableProductTypes.map((val, i) => {
+                return (
+                  <MenuItem key={i} value={val.value}>
+                    {val.text}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={2}>
+          <Button
+            disableElevation
+            fullWidth
+            size="large"
+            variant="outlined"
+            color="primary"
+            onClick={(e) => onRemoveProductClickHandler(e, index)}
+          >
+            Remove Product
+          </Button>
+        </Grid>
+      </Grid>
+      {val.product_type === "tshirt" && (
+        <TshirtSocks
+          key={index}
+          index={index}
+          dataCallback={dataCallback}
+          type={val.product_type}
+          name="T-Shirt"
+        />
+      )}
+      {val.product_type === "socks" && (
+        <TshirtSocks
+          key={index}
+          index={index}
+          dataCallback={dataCallback}
+          type={val.product_type}
+          name="Socks"
+        />
+      )}
+      {val.product_type === "cap" && (
+        <Cap
+          key={index}
+          index={index}
+          dataCallback={dataCallback}
+          type={val.product_type}
+        />
+      )}
+    </Box>
+  );
+
+  return (
+    <>
+      <Box
+        style={{
+          marginTop: "1rem",
+        }}
+      >
+        {products.map((val, index) => buildProductTypeComponent(val, index))}
+        {/* <Tshirt />
+        <Cap />
+        <Socks /> */}
+        <Grid container spacing={2}>
+          <Grid item xs={2}>
+            <Button
+              disableElevation
+              fullWidth
+              size="large"
+              type="button"
+              variant="outlined"
+              color="primary"
+              style={{
+                marginTop: "15px",
+              }}
+              onClick={onAddProductClickHandler}
+            >
+              Add Product
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </>
+  );
 };
 
 export default AddProduct;

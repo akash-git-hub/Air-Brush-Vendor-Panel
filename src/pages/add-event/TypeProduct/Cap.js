@@ -1,104 +1,144 @@
-import React from 'react'
-import { Button, Box, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material";
-import FileUpload from 'themes/overrides/FileUpload';
-import SketchPickers from "themes/overrides/SketchPicker";
+import React, { useState } from "react";
+import {
+  Button,
+  Box,
+  Grid,
+  InputLabel,
+  OutlinedInput,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Delete, CloseOutlined } from "@mui/icons-material";
+import CustomFileUpload from "themes/overrides/CustomFileUpload";
+import CustomSketchPickers from "themes/overrides/CustomSketchPicker";
 
-const Cap = () => {
-    return (
-        <>
-            <Box container className="CapPanel">
-                <Typography variant="h6">Caps</Typography>
-                <Grid container spacing={2}>
-                    <Grid item xs={2}>
-                        <FileUpload id='file02' placeholder="Product Image" />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Stack spacing={1}>
-                            <InputLabel htmlFor="quantity">Quantity / Stock</InputLabel>
-                            <OutlinedInput
-                                id="quantity"
-                                type="number"
-                                value='Stock'
-                                name="stock"
-                                // onBlur={handleBlur}
-                                // onChange={handleChange}
-                                placeholder="Enter quantity"
-                                fullWidth
-                                // error={Boolean(touched.stock && errors.stock)}
-                            />
-                            {/* {touched.stock && errors.stock && (
-                                <FormHelperText
-                                    error
-                                    id={`quantity-helper-text-${index}`}
-                                >
-                                    {errors.stock}
-                                </FormHelperText>
-                            )} */}
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Grid container spacing={2}>
-                                <Grid item xs={1} >
-                                    <Stack spacing={1}>
-                                        <SketchPickers />
-                                        <Button
-                                            size="normal"
-                                            variant="outlined"
-                                            color="secondary"
-                                            sx={{
-                                                minWidth: '100%'
-                                            }}
-                                        >
-                                            <CloseOutlined />
-                                        </Button>
-                                    </Stack>
-                                </Grid>
-                            <Grid item xs={3}>
-                                <Button
-                                    fullWidth
-                                    size="large"
-                                    variant="contained"
-                                    color="primary"
-                                    style={{
-                                        marginTop: '1.6rem'
-                                    }}
-                                >
-                                    Add Color
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item xs={2}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                startIcon={<Delete />}
-                                variant="outlined"
-                                color="secondary"
-                                style={{ marginBottom: "25px" }}
-                            >
-                                Delete Panel
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item xs={2}>
-                            <Button
-                                fullWidth
-                                size="large"
-                                variant="outlined"
-                                color="secondary"
-                            >
-                                Add more product
-                            </Button>
-                        </Grid>
-                    </Grid>
-            </Box>
-        </>
-    )
-}
+const Cap = ({ index, dataCallback, type }) => {
+  const [productData, setProductData] = useState({
+    product_type: type,
+    file: null,
+    quantity: 0,
+    colors: [],
+  });
 
-export default Cap
+  const onAddColorClickHandler = (e) => {
+    const data = { ...productData };
+    data.colors.push("");
+
+    setProductData(data);
+
+    dataCallback("products", data, "update", index);
+  };
+
+  const onRemoveColorClickHandler = (e, i) => {
+    const data = { ...productData };
+    data.colors.splice(i, 1);
+
+    setProductData(data);
+
+    dataCallback("products", data, "update", index);
+  };
+
+  const onQuantityChangeHandler = (e) => {
+    const data = { ...productData };
+    data.quantity = e.target.value;
+
+    setProductData(data);
+
+    dataCallback("products", data, "update", index);
+  };
+
+  const fileCallback = (file) => {
+    const data = { ...productData };
+    data["file"] = file;
+
+    dataCallback("products", data, "update", index);
+    setProductData(data);
+  };
+
+  const colorCallback = (colorHexCode, i) => {
+    let data = { ...productData };
+    data.colors[i] = colorHexCode;
+    setProductData(data);
+
+    dataCallback("products", data, "update", index);
+  };
+
+  const buildColorPickerComponent = (val, index) => (
+    <Grid item xs={1}>
+      <Stack spacing={1}>
+        <CustomSketchPickers
+          index={index}
+          colorCallback={colorCallback}
+          color={val}
+        />
+        <Button
+          size="normal"
+          variant="outlined"
+          color="secondary"
+          sx={{
+            minWidth: "100%",
+          }}
+          onClick={(e) => onRemoveColorClickHandler(e, index)}
+        >
+          <CloseOutlined />
+        </Button>
+      </Stack>
+    </Grid>
+  );
+
+  return (
+    <>
+      <Box container className="CapPanel">
+        <Typography variant="h6">Caps</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={2}>
+            <CustomFileUpload
+              id={`products_${index}`}
+              type="products"
+              placeholder="Product Image"
+              file={productData.file}
+              fileCallback={fileCallback}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Stack spacing={1}>
+              <InputLabel htmlFor="quantity">Quantity / Stock</InputLabel>
+              <OutlinedInput
+                id="quantity"
+                type="number"
+                value={productData.quantity}
+                name="stock"
+                placeholder="Quantity"
+                fullWidth
+                onChange={onQuantityChangeHandler}
+              />
+            </Stack>
+          </Grid>
+          <Grid item xs={8}>
+            <Grid container spacing={2}>
+              {productData.colors.map((val, index) =>
+                buildColorPickerComponent(val, index)
+              )}
+              <Grid item xs={3}>
+                <Button
+                  fullWidth
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    marginTop: "1.6rem",
+                  }}
+                  onClick={onAddColorClickHandler}
+                >
+                  Add Color
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+    </>
+  );
+};
+
+export default Cap;
