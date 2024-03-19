@@ -76,6 +76,7 @@ const AuthLogin = () => {
         setLoggedIn(true);
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("authToken", `${res.data.token}`);
+        localStorage.setItem("profileData", JSON.stringify(res.data));
         Navigate("/vendor/dashboard", { replace: true });
       } else {
         // setStatus({ success: false });

@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
-import { createArtist } from "../../../../../networking/NetworkCall";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useNavigate, useLocation } from "react-router-dom"
 import { Button, Grid, Typography, Modal, Box, TextField, Stack, InputLabel, OutlinedInput, FormHelperText, IconButton, InputAdornment } from '@mui/material';
 import { EyeOutlined, EyeInvisibleOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -18,86 +16,51 @@ const style = {
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 2,
 };
 
-export const ProfileModal = ({ btnClass, getData }) => {
+export const ProfileModal = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [logo, setLogo] = useState(null);
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate()
+    const [profileData, setProfileData] = useState({})
 
-
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const handleLogoChange = (event) => {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith("image")) {
-            setFieldValue("organization_logo", file);
-            setLogo(file);
-        } else {
-            toast.error("Please select image type file");
-            setFieldValue("organization_logo", null);
-            setLogo(null);
-        }
-    };
-
-    // Destructuring formik object
-    const {
-        values,
-        errors,
-        touched,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        setFieldValue
-    } = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-            name: '',
-            mobile: '',
-            organization_name: '',
-            organization_logo: null
-        },
-
-        validationSchema: Yup.object().shape({
-            email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-            password: Yup.string().max(255).required('Password is required'),
-            name: Yup.string().max(200).required('Name is Required'),
-            organization_logo: Yup.string().required("Company logo is required"),
-            mobile: Yup.string().required('Mobile number is required'),
-            organization_name: Yup.string().required('Organization name is required')
-        }),
-
-        onSubmit: async (values, { setErrors, setStatus, setSubmitting }) => {
-            const data = new FormData();
-            data.append("email", values.email);
-            data.append("name", values.name);
-            data.append("mobile", values.mobile);
-            data.append("organization_name", values.organization_name);
-            data.append("password", values.password)
-            data.append("organization_logo", values.organization_logo)
-
-            const res = await createArtist(data);
-            if (res.success) {
-                toast.success(res.msg);
-                navigate("/admin/vendor-list");
-            } else {
-                toast.error(res.msg);
+    const getProfileData = () => {
+        const profileData = localStorage.getItem("profileData");
+        if (profileData) {
+            const parsedData = JSON.parse(profileData);
+            if (parsedData) {
+                setLogo(parsedData.organization_logo);
+                setProfileData(parsedData);
             }
         }
-    });
+    }
 
+    useEffect(() => {
+        getProfileData()
+    }, []);
+
+    // const [showPassword, setShowPassword] = useState(false);
+
+
+    // const handleClickShowPassword = () => {
+    //     setShowPassword(!showPassword);
+    // };
+
+    // const handleMouseDownPassword = (event) => {
+    //     event.preventDefault();
+    // };
+
+    // const handleLogoChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file && file.type.startsWith("image")) {
+    //         setLogo(file);
+    //     } else {
+    //         toast.error("Please select image type file");
+    //         setLogo(null);
+    //     }
+    // };
 
     return (
         <>
@@ -125,12 +88,12 @@ export const ProfileModal = ({ btnClass, getData }) => {
 
             >
                 <Box sx={style} >
-                    <Typography id="modal-modal-title" variant="h2" component="h2" sx={{
-                        textAlign: 'center'
+                    <Typography id="modal-modal-title" variant="h3" component="h2" sx={{
+                        textAlign: 'left'
                     }}>
-                        My Profile
+                        Profile
                     </Typography>
-                    <form onSubmit={handleSubmit}
+                    <form
                         noValidate
 
                     >
@@ -141,10 +104,9 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                 type="file"
                                 name="organization_logo"
                                 style={{ display: 'none' }}
-                                onChange={handleLogoChange}
-                                onBlur={handleBlur}
-                                error={Boolean(touched.name && errors.name)}
+                                // onChange={handleLogoChange}
                                 required
+                                disabled
                             />
                             <Box sx={{
                                 display: 'grid',
@@ -169,7 +131,12 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                         }
                                     }}>
                                         {logo && (
-                                            <img src={URL.createObjectURL(logo)} alt="Logo" style={{
+                                            // <img src={URL.createObjectURL(logo)} alt="Logo" style={{
+                                            //     width: '80px',
+                                            //     height: '80px',
+                                            //     objectFit: 'contain'
+                                            // }} />
+                                            <img src={logo} alt="Logo" style={{
                                                 width: '80px',
                                                 height: '80px',
                                                 objectFit: 'contain'
@@ -178,11 +145,6 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                         {!logo && <span>Upload Logo</span>}
                                     </Button>
                                 </label>
-                                {touched.organization_logo && errors.organization_logo && (
-                                    <FormHelperText error id="standard-weight-helper-text-email-login">
-                                        {errors.organization_logo}
-                                    </FormHelperText>
-                                )}
                             </Box>
 
                             <Grid container spacing={1}>
@@ -192,19 +154,11 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                         <OutlinedInput
                                             id="name"
                                             type="text"
-                                            value={values.name}
+                                            value={profileData.name}
                                             name="name"
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
                                             placeholder="Enter name"
                                             fullWidth
-                                            error={Boolean(touched.name && errors.name)}
                                         />
-                                        {touched.name && errors.name && (
-                                            <FormHelperText error id="standard-weight-helper-text-email-login">
-                                                {errors.name}
-                                            </FormHelperText>
-                                        )}
                                     </Stack>
                                 </Grid>
                                 <Grid item lg={6} xs={12}>
@@ -213,19 +167,11 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                         <OutlinedInput
                                             id="email-login"
                                             type="email"
-                                            value={values.email}
+                                            value={profileData.email}
                                             name="email"
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
                                             placeholder="Enter email address"
                                             fullWidth
-                                            error={Boolean(touched.email && errors.email)}
                                         />
-                                        {touched.email && errors.email && (
-                                            <FormHelperText error id="standard-weight-helper-text-email-login">
-                                                {errors.email}
-                                            </FormHelperText>
-                                        )}
                                     </Stack>
                                 </Grid>
                                 <Grid item lg={6} xs={12}>
@@ -234,33 +180,22 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                         <OutlinedInput
                                             id="mobile"
                                             type="text"
-                                            value={values.mobile}
+                                            value={profileData.mobile}
                                             name="mobile"
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
                                             placeholder="Enter mobile no"
                                             fullWidth
-                                            error={Boolean(touched.mobile && errors.mobile)}
                                         />
-                                        {touched.mobile && errors.mobile && (
-                                            <FormHelperText error id="standard-weight-helper-text-email-login">
-                                                {errors.mobile}
-                                            </FormHelperText>
-                                        )}
                                     </Stack>
                                 </Grid>
-                                <Grid item lg={6} xs={12}>
+                                {/* <Grid item lg={6} xs={12}>
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="password-login">Password</InputLabel>
                                         <OutlinedInput
                                             fullWidth
-                                            error={Boolean(touched.password && errors.password)}
                                             id="-password-login"
                                             type={showPassword ? 'text' : 'password'}
                                             value={values.password}
                                             name="password"
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
                                             endAdornment={
                                                 <InputAdornment position="end">
                                                     <IconButton
@@ -276,43 +211,30 @@ export const ProfileModal = ({ btnClass, getData }) => {
                                             }
                                             placeholder="Enter password"
                                         />
-                                        {touched.password && errors.password && (
-                                            <FormHelperText error id="standard-weight-helper-text-password-login">
-                                                {errors.password}
-                                            </FormHelperText>
-                                        )}
                                     </Stack>
-                                </Grid>
-                                <Grid item lg={12} xs={12}>
+                                </Grid> */}
+                                <Grid item lg={6} xs={12}>
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="organization_name">Organization Name</InputLabel>
                                         <OutlinedInput
                                             id="organization_name"
                                             type="text"
-                                            value={values.organization_name}
+                                            value={profileData.organization_name}
                                             name="organization_name"
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
                                             placeholder="Enter organization name"
                                             fullWidth
-                                            error={Boolean(touched.organization_name && errors.organization_name)}
                                         />
-                                        {touched.organization_name && errors.organization_name && (
-                                            <FormHelperText error id="standard-weight-helper-text-email-login">
-                                                {errors.organization_name}
-                                            </FormHelperText>
-                                        )}
                                     </Stack>
                                 </Grid>
                             </Grid>
-
+                            {/* 
                             <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting} sx={{
                                 width: '100%',
                                 marginTop: '15px',
                                 background: '#0958d9!important'
                             }}>
-                                Submit
-                            </LoadingButton>
+                                Update
+                            </LoadingButton> */}
                         </div>
 
                     </form>

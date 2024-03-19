@@ -31,7 +31,7 @@ import ProfileTab from './ProfileTab';
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { ProfileModal } from './ProfileModal';
+import { ProfileModal } from '../../../../../pages/authentication/ProfileModal';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -150,7 +150,7 @@ const Profile = () => {
                           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
                           
-                              <ProfileModal   sx={{
+                              <ProfileModal  sx={{
                                   display: 'flex',
                                   flexDirection: 'row',
                                   justifyContent: 'start',
