@@ -39,7 +39,7 @@ const dashboard = {
       type: 'item',
       url: '/vendor/event-list',
       icon: icons.SolutionOutlined,
-      breadcrumbs: true
+      breadcrumbs: false
     },
     {
       id: 'OrderList',
