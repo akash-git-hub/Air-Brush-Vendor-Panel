@@ -12,7 +12,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
+    width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -112,7 +112,8 @@ export const ProfileModal = () => {
                                 display: 'grid',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                padding: '10px'
+                                padding: '10px',
+                                textAlign: "center"
                             }}>
 
                                 <label htmlFor="contained-button-file">
@@ -145,10 +146,12 @@ export const ProfileModal = () => {
                                         {!logo && <span>Upload Logo</span>}
                                     </Button>
                                 </label>
+                                <Typography component="h5">{profileData.email}</Typography>
+                                <Typography variant="body2" component="h6">Vendor Id : <b>{profileData.unique_id}</b></Typography>
                             </Box>
 
                             <Grid container spacing={1}>
-                                <Grid item lg={6} xs={12}>
+                                <Grid item lg={12} xs={12}>
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="name">Name</InputLabel>
                                         <OutlinedInput
@@ -161,20 +164,7 @@ export const ProfileModal = () => {
                                         />
                                     </Stack>
                                 </Grid>
-                                <Grid item lg={6} xs={12}>
-                                    <Stack spacing={1}>
-                                        <InputLabel htmlFor="email-login">Email Address</InputLabel>
-                                        <OutlinedInput
-                                            id="email-login"
-                                            type="email"
-                                            value={profileData.email}
-                                            name="email"
-                                            placeholder="Enter email address"
-                                            fullWidth
-                                        />
-                                    </Stack>
-                                </Grid>
-                                <Grid item lg={6} xs={12}>
+                                <Grid item lg={12} xs={12}>
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="mobile">Mobile No</InputLabel>
                                         <OutlinedInput
@@ -213,7 +203,8 @@ export const ProfileModal = () => {
                                         />
                                     </Stack>
                                 </Grid> */}
-                                <Grid item lg={6} xs={12}>
+
+                                <Grid item lg={12} xs={12}>
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="organization_name">Organization Name</InputLabel>
                                         <OutlinedInput
