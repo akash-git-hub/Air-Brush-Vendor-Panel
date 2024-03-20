@@ -15,8 +15,13 @@ export const CapProduct = ({ productImage, colorsArray, productQuantity }) => {
               alt=""
               className="img-fluid"
               style={{
-                width: "7vw",
-                height: "7vw",
+                minwidth: "100%",
+                minheight: "100%",
+                width: '140px',
+                height: '140px',
+                objectFit: 'contain',
+                padding: '10px',
+                background: '#e6f4ff'
               }}
             />
           </Grid>
