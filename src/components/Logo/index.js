@@ -20,7 +20,7 @@ const LogoSection = ({ sx, to }) => {
       disableRipple
       component={Link}
       onClick={() => dispatch(activeItem({ openItem: [defaultId] }))}
-      to={!to ? config.defaultPath : to}
+      // to={!to ? config.defaultPath : to}
       sx={sx}
     >
       <Logo />
